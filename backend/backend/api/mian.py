@@ -1,0 +1,24 @@
+from fastapi import APIRouter
+
+from backend.api.routes import demo
+
+from typing import Union
+
+api_router = APIRouter()
+
+
+@api_router.get("/")
+async def read_root():
+    return {"Hello": "World11122"}
+
+
+@api_router.get("/items/{item_id}")
+async def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
+
+
+# api_router.include_router(login.router, tags=["login"])
+# api_router.include_router(users.router, prefix="/users", tags=["users"])
+# api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
+# api_router.include_router(items.router, prefix="/items", tags=["items"])
+api_router.include_router(demo.router, prefix="/demo", tags=["demo"])

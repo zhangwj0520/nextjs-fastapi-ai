@@ -6,8 +6,12 @@ authors = ["张为杰 <zhangwj0520@hotmail.com>"]
 readme = "README.md"
 package-mode = false
 
+[tool.poetry.scripts]
+start = "backend.serve:start"
+
 [tool.poetry.dependencies]
 python = "^3.12"
+uvicorn = "^0.30.1"
 
 
 [build-system]
