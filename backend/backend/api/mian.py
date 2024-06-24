@@ -4,6 +4,17 @@ from backend.api.routes import demo, prisma
 
 from typing import Union
 
+
+from pydantic import BaseModel
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+
 api_router = APIRouter()
 
 
@@ -15,6 +26,12 @@ async def read_root():
 @api_router.get("/items/{item_id}")
 async def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+
+
+# @api_router.post("/items/")
+# async def create_item(item: Item):
+#     print("item", item)
+#     return item
 
 
 # api_router.include_router(login.router, tags=["login"])
