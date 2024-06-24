@@ -14,3 +14,7 @@ export PKG_CONFIG_PATH="$(brew --prefix)/opt/mysql-client/lib/pkgconfig"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql-client/lib/pkgconfig"
 pipx install mysqlclient
 ```
+
+### prisma
+
+1. prisma db push 同步数据库

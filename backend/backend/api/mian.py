@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 
-from backend.api.routes import demo
+from backend.api.routes import demo, prisma
 
 from typing import Union
 
 api_router = APIRouter()
 
 
-@api_router.get("/")
+@api_router.get("")
 async def read_root():
     return {"Hello": "World11122"}
 
@@ -22,3 +22,4 @@ async def read_item(item_id: int, q: Union[str, None] = None):
 # api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
 # api_router.include_router(items.router, prefix="/items", tags=["items"])
 api_router.include_router(demo.router, prefix="/demo", tags=["demo"])
+api_router.include_router(prisma.router, prefix="/prisma", tags=["prisma"])

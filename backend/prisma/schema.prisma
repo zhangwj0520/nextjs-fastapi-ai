@@ -1,0 +1,27 @@
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:Qwer1234@127.0.0.1:23306/FastAPI"
+}
+
+generator db {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = -1
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String
+  posts Post[]
+  email String?
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  title      String
+  published  Boolean
+  author     User?    @relation(fields: [author_id], references: [id])
+  author_id  Int?
+}

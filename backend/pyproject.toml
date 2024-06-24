@@ -12,6 +12,8 @@ start = "backend.serve:start"
 [tool.poetry.dependencies]
 python = "^3.12"
 uvicorn = "^0.30.1"
+prisma = "^0.13.1"
+fastapi = "^0.111.0"
 
 
 [build-system]

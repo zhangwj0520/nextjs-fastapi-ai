@@ -5,9 +5,9 @@ from typing import Union
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "Worldnihao"}
 
 
 @router.get("/items/{item_id}")
