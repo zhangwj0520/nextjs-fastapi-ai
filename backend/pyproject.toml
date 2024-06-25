@@ -2,7 +2,7 @@
 name = "backend"
 version = "0.1.0"
 description = ""
-authors = ["张为杰 <zhangwj0520@hotmail.com>"]
+authors = ["zhangweijie <zhangwj0520@hotmail.com>"]
 readme = "README.md"
 package-mode = false
 
@@ -14,6 +14,10 @@ python = "^3.12"
 uvicorn = "^0.30.1"
 prisma = "^0.13.1"
 fastapi = "^0.111.0"
+langchain = "^0.2.5"
+langchain-openai = "^0.1.9"
+langgraph = "^0.1.1"
+langserve = {extras = ["all"], version = "^0.2.2"}
 
 
 [build-system]

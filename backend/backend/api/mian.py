@@ -1,40 +1,19 @@
 from fastapi import APIRouter
-
 from backend.api.routes import demo, prisma
 
-from pydantic import BaseModel
+from langserve import add_routes
+from backend.ai.chain import create_graph
+from backend.ai.types import ChatInputType
 
-
-from typing import Union
 
 api_router = APIRouter()
 
+graph = create_graph()
 
-# @api_router.get("")
-# async def read_root():
-#     return {"Hello": "World11122"}
+runnable = graph.with_types(input_type=ChatInputType, output_type=dict)
 
-
-# @api_router.get("/items/{item_id}")
-# async def read_item(item_id: int, q: Union[str, None] = None):
-#     return {"item_id": item_id, "q": q}
+add_routes(api_router, runnable, path="/chat", playground_type="chat")
 
 
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
-
-
-@api_router.post("/items")
-async def create_item(item: Item):
-    return item
-
-
-# api_router.include_router(login.router, tags=["login"])
-# api_router.include_router(users.router, prefix="/users", tags=["users"])
-# api_router.include_router(utils.router, prefix="/utils", tags=["utils"])
-# api_router.include_router(items.router, prefix="/items", tags=["items"])
 api_router.include_router(demo.router, prefix="/demo", tags=["demo"])
 api_router.include_router(prisma.router, prefix="/prisma", tags=["prisma"])
