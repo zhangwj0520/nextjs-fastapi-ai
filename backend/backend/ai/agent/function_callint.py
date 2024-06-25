@@ -27,7 +27,7 @@ def test():
             # Use the model service provided by DashScope:
             "model": "qwen2-1.5b-instruct",
             "model_server": "dashscope",
-            "api_key": os.environ.get("DASHSCOPE_API_KEY"),
+            "api_key": "sk-cd8f0b15a37f47729f2dc7bba934c587",
             # Use the model service provided by Together.AI:
             # 'model': 'Qwen/Qwen1.5-14B-Chat',
             # 'model_server': 'https://api.together.xyz',  # api_base
@@ -103,3 +103,7 @@ def test():
             stream=True,
         ):  # get a new response from the model where it can see the function response
             print(responses)
+
+
+if __name__ == "__main__":
+    test()
