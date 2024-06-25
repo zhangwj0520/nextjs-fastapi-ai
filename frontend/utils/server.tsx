@@ -69,6 +69,7 @@ export function streamRunnableUI<RunInput, RunOutput>(
       version: "v1",
     })) {
       const { output, chunk } = streamEvent.data;
+      console.log("output, chunk",output, chunk)
       const [type] = streamEvent.event.split("_").slice(2);
 
       /**

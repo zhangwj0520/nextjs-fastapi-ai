@@ -29,8 +29,9 @@ def invoke_model(state: GenerativeUIState, config: RunnableConfig) -> Generative
         [
             (
                 "system",
-                "You are a helpful assistant. You're provided a list of tools, and an input from the user.\n"
-                + "Your job is to determine whether or not you have a tool which can handle the users input, or respond with plain text.",
+                "你是一个有用的助手。您将获得工具列表以及用户的输入.\n"
+                # + "Your job is to determine whether or not you have a tool which can handle the users input, or respond with plain text.",
+                + "你的工作是确定你是否拥有可以处理用户输入或以纯文本响应的工具。",
             ),
             MessagesPlaceholder("input"),
         ]
@@ -46,8 +47,11 @@ def invoke_model(state: GenerativeUIState, config: RunnableConfig) -> Generative
 
     if isinstance(result.tool_calls, list) and len(result.tool_calls) > 0:
         parsed_tools = tools_parser.invoke(result, config)
+
+        print("parsed_tools", parsed_tools)
         return {"tool_calls": parsed_tools}
     else:
+        print("result.content", result.content)
         return {"result": str(result.content)}
 
 
