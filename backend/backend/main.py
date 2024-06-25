@@ -7,13 +7,6 @@ from backend.api.mian import api_router
 
 from backend.core.initPrisma import lifespan
 
-# from langserve import add_routes
-
-
-# Load environment variables from .env file
-# load_dotenv()
-
-
 def app() -> None:
     app = FastAPI(
         title="Gen UI Backend",

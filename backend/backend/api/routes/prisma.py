@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 
 from prisma.models import User, Post
-from prisma.types import UserUpdateInput, UserCreateInput
+from prisma.types import (
+    UserUpdateInput,
+    UserCreateInput,
+)
 from prisma.partials import UserWithoutRelations, PostWithoutRelations
 
 from typing import Optional, List
@@ -27,79 +30,69 @@ async def list_users(take: int = 10) -> List[User]:
     return await User.prisma().find_many(take=take)
 
 
-@router.post(
-    "/user",
-    response_model=UserWithoutRelations,
-)
-async def create_user(item: UserCreateInput) -> User:
-    """
-    这个函数定义了一个 POST 方法，用于创建一个新的用户。
-
-    参数：
-    - `item`: 一个 UserCreateInput 实例，包含了新用户的创建所需数据（如用户名和电子邮件）。
-
-    返回值：
-    - `UserWithoutRelations`：这是对返回的用户实体的一个修改版本，通常意味着不包括与该用户相关联的关系模型字段。这可能是因为在 API 层级上处理性能、内存或简化响应的目的。
-
-    实现流程：
-    1. 使用 Prisma 的 ORM 方法 `.create(item)` 来创建一个新的用户实例。
-    2. 然后，通过 `await User.prisma().create(item)` 调用异步操作来执行创建操作，并在完成时返回结果。这通常意味着该方法会等待数据库操作完成并返回新创建的 User 对象。
-
-    注意：在这个上下文中，User 类和 Prisma ORM（Prisma Client）都假设已经集成到系统中以处理数据库交互。
-    """
-    return await User.prisma().create(item)
+@router.post("/user", response_model=UserWithoutRelations)
+async def create_user(user: UserCreateInput) -> User:
+    return await User.prisma().create(user)
 
 
 @router.put(
-    "/users/{user_id}",
+    "/user",
     response_model=UserWithoutRelations,
 )
-async def update_user(
-    user_id: str,
-    name: Optional[str] = None,
-    email: Optional[str] = None,
-) -> Optional[User]:
-    data: UserUpdateInput = {}
+async def update_user_byid(user: UserUpdateInput) -> UserWithoutRelations:
+    """
+    根据用户ID更新用户信息。
 
-    if name is not None:
-        data["name"] = name
+    :param user: UserUpdateInput - 用户ID和更新后的用户信息。
+    :return: UserWithoutRelations - 更新后的用户信息。
+    """
+    id = user["id"]
+    del user["id"]
+    return await User.prisma().update(
+        where={"id": id},
+        data=user,
+    )
 
-    if email is not None:
-        data["email"] = email
 
+@router.put(
+    "/user/{user_id}",
+    response_model=UserWithoutRelations,
+)
+async def update_user(user_id: int, user: UserUpdateInput):
     return await User.prisma().update(
         where={
             "id": user_id,
         },
-        data=data,
+        data=user,
     )
 
 
-# @router.delete(
-#     "/users/{user_id}",
-#     response_model=User,
-# )
-# async def delete_user(user_id: str) -> Optional[User]:
-#     return await User.prisma().delete(
-#         where={
-#             "id": user_id,
-#         },
-#         include={
-#             "posts": True,
-#         },
-#     )
+@router.delete(
+    "/user/{user_id}",
+    response_model=User,
+)
+async def delete_user(user_id: int):
+    print("user_id", user_id)
+    return await User.prisma().delete(
+        where={
+            "id": user_id,
+        },
+        include={
+            "posts": True,
+        },
+    )
 
 
-# @router.get(
-#     "/users/{user_id}",
-#     response_model=UserWithoutRelations,
-# )
-# async def get_user(user_id: str) -> Optional[User]:
-#     return await User.prisma().find_unique(
-#         where={
-#             "id": user_id,
-#         },
-#     )
+@router.get(
+    "/user/{user_id}",
+    response_model=UserWithoutRelations,
+)
+async def get_user(user_id: int) -> Optional[User]:
+    return await User.prisma().find_unique(
+        where={
+            "id": user_id,
+        },
+    )
 
 
 # @router.get(
