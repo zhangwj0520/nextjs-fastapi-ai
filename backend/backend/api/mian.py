@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.api.routes import demo, prisma
+from backend.api.routes import demo, prisma, stream
 
 from langserve import add_routes
 from backend.ai.chain import create_graph
@@ -19,11 +19,13 @@ class Item(BaseModel):
 api_router = APIRouter()
 
 graph = create_graph()
+graph.debug = True
 
 runnable = graph.with_types(input_type=ChatInputType, output_type=dict)
 
 add_routes(api_router, runnable, path="/chat", playground_type="chat")
 
 
+api_router.include_router(stream.router, prefix="/stream", tags=["stream"])
 api_router.include_router(demo.router, prefix="/demo", tags=["demo"])
 api_router.include_router(prisma.router, prefix="/prisma", tags=["prisma"])

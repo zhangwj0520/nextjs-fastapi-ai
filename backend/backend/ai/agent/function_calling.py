@@ -19,7 +19,7 @@ def get_current_weather(location, unit="摄氏度"):
         return json.dumps({"location": location, "temperature": "unknown"})
 
 
-def test():
+def function_calling_demo():
     key = os.getenv("DASHSCOPE_API_KEY")
 
     print("key", key)
@@ -68,6 +68,7 @@ def test():
     responses = []
     for responses in llm.chat(messages=messages, functions=functions, stream=True):
         print(1111, responses)
+        yield f"data: {responses}\n\n"
 
     messages.extend(
         responses
@@ -93,6 +94,7 @@ def test():
         )
         print("# Function Response:")
         print(function_response)
+        yield f"data: {function_response}\n\n"
 
         # Step 4: send the info for each function call and function response to the model 将每个函数调用和函数响应的信息发送给模型
         messages.append(
@@ -110,7 +112,8 @@ def test():
             stream=True,
         ):  # get a new response from the model where it can see the function response
             print(responses)
+            yield f"data: {responses}\n\n"
 
 
 if __name__ == "__main__":
-    test()
+    function_calling_demo()

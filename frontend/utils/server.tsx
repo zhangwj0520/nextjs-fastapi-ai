@@ -69,8 +69,13 @@ export function streamRunnableUI<RunInput, RunOutput>(
       version: "v1",
     })) {
       const { output, chunk } = streamEvent.data;
-      console.log("output, chunk",output, chunk)
+      // console.log("output, chunk",output, chunk)
+      // console.log("===========")
+      // console.log("streamEvent.event",streamEvent.event,streamEvent.name)
+      // console.log("===========")
+      // console.log("streamEvent.name",streamEvent.name)
       const [type] = streamEvent.event.split("_").slice(2);
+      // const [kind, type] = streamEvent.event.split("_").slice(1);
 
       /**
        * Handles the 'invoke_model' event by checking for tool calls in the output.
@@ -78,6 +83,11 @@ export function streamRunnableUI<RunInput, RunOutput>(
        * selected tool component based on the tool type and appends its loading state to the UI.
        *
        * @param output - The output object from the 'invoke_model' event
+       * 通过检查输出中的工具调用来处理“invoke_model”事件。
+       * 如果找到工具调用并且尚未选择任何工具组件，则会设置
+       * 根据工具类型选择工具组件并将其加载状态附加到 UI。
+       *
+       * @param output -“invoke_model”事件的输出对象
        */
       const handleInvokeModelEvent = (output: Record<string, any>) => {
         if ("tool_calls" in output && output.tool_calls.length > 0) {
@@ -97,6 +107,11 @@ export function streamRunnableUI<RunInput, RunOutput>(
        * with the final state and tool result data.
        *
        * @param output - The output object from the 'invoke_tools' event
+   
+       *通过更新所选工具的 UI 来处理“invoke_tools”事件
+       *包含最终状态和工具结果数据。
+       *
+       *@param output -“invoke_tools”事件的输出对象
        */
       const handleInvokeToolsEvent = (output: Record<string, any>) => {
         if (selectedToolUI && selectedToolComponent) {
@@ -112,6 +127,12 @@ export function streamRunnableUI<RunInput, RunOutput>(
        *
        * @param streamEvent - The stream event object
        * @param chunk - The chunk object containing the content
+       *通过创建新的文本流来处理“on_chat_model_stream”事件
+       *用于 AI 消息（如果当前运行 ID 不存在）。
+       *然后它将块内容附加到相应的文本流。
+       *
+       *@param streamEvent -流事件对象
+       *@param chunk -包含内容的块对象
        */
       const handleChatModelStreamEvent = (
         streamEvent: StreamEvent,

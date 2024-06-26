@@ -47,6 +47,7 @@ def invoke_model(state: GenerativeUIState, config: RunnableConfig) -> Generative
 
     if isinstance(result.tool_calls, list) and len(result.tool_calls) > 0:
         parsed_tools = tools_parser.invoke(result, config)
+        print("parsed_tools", parsed_tools)
 
         print("parsed_tools", parsed_tools)
         return {"tool_calls": parsed_tools}
@@ -84,9 +85,17 @@ def create_graph() -> CompiledGraph:
 
     workflow.add_node("invoke_model", invoke_model)  # type: ignore
     workflow.add_node("invoke_tools", invoke_tools)
+
+    # Add a conditional edge from the starting node to any number of destination nodes.
+    # 添加从起始节点到任意数量的目标节点的条件边。
     workflow.add_conditional_edges("invoke_model", invoke_tools_or_return)
+
+    # 指定要在图中调用的第一个节点。
     workflow.set_entry_point("invoke_model")
+
+    # 将节点标记为图形的终点
     workflow.set_finish_point("invoke_tools")
 
+    # 将状态图编译为 CompiledGraph 对象。
     graph = workflow.compile()
     return graph
